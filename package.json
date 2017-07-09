@@ -1,0 +1,21 @@
+{
+  "name": "lemonexpress",
+  "version": "1.0.0",
+  "description": "foo",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/summerwxy/ooxx.git"
+  },
+  "author": "0_o",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "pg": "^6.4.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.2.1"
+  }
+}
