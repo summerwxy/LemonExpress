@@ -20,6 +20,13 @@ app.get('/classic.jsonp', function(req, res) { res.sendFile("classic.jsonp", { r
 // serve index.html for all remaining routes, in order to leave routing up to angular
 app.all("/*", function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
+
+app.set('port', (process.env.PORT || 3000));
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
+
+// app.listen(3000, function () {
+//   console.log('Example app listening on port 3000!')
+// })
