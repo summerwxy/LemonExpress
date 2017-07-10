@@ -3,6 +3,13 @@ var app = express()
 
 // app.get('/', function (req, res) { res.send('Hello World!') });
 
+// CROS setting
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+ });
+
 // serve all asset files from necessary directories
 app.use("/archive", express.static(__dirname + "/Lemon/archive"));
 app.use("/classic", express.static(__dirname + "/Lemon/classic"));
@@ -13,20 +20,31 @@ app.get('/classic.json', function(req, res) { res.sendFile("classic.json", { roo
 app.get('/classic.jsonp', function(req, res) { res.sendFile("classic.jsonp", { root: __dirname + "/Lemon" }); });
 
 
-// any API endpoints
-// app.post('/api/v1/auth/login', routes.auth.login);
+
+// API endpoints
+// app.all('/api/customer', function(req, res) {
+//   console.log('custom');
+//   res.send('Hello World!')
+// });
 
 
-// serve index.html for all remaining routes, in order to leave routing up to angular
+// add by 0_o =======================================================================
+// 這個要寫在前面, 才能掛上 router, 加上這個才能取得, post 的參數
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '16mb'})); // for parsing application/json
+app.use(bodyParser.urlencoded({ limit: '16mb', extended: false })); // for parsing application/x-www-form-urlencoded
+
+var api = require('./api/api');
+app.use('/api', api.router);
+// ===================================================================================
+
+
+// 所有的訪問, 跑到 index.html 那邊去
 app.all("/*", function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
 
 
-app.set('port', (process.env.PORT || 3000));
-
+// dev mode port 5000
+app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
-// app.listen(3000, function () {
-//   console.log('Example app listening on port 3000!')
-// })
