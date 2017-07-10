@@ -8,11 +8,14 @@ var GET_FUNC = api.GET_FUNC;
 var PUT_FUNC = api.PUT_FUNC;
 var DELETE_FUNC = api.DELETE_FUNC;
 
-var table = sequelize.define('customer', {
+var table = sequelize.define('partner', {
     uid: { type: Sequelize.INTEGER, autoIncrement: true, allowNull: false, primaryKey: true, unique: true}, 
+    location: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
     name: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
     telephone: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
-    location: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
+    weixin: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
+    company: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
+    address: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
     remark: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
 });
 
@@ -23,7 +26,7 @@ var table = sequelize.define('customer', {
 // });
 
 // API
-router.route(["/customer", '/customer/*'])
+router.route(["/partner", '/partner/*'])
     .post(function(req, res) { POST_FUNC(req, res, table); })
     .get(function(req, res) { GET_FUNC(req, res, table); })
     .put(function(req, res) { PUT_FUNC(req, res, table); })
