@@ -19,12 +19,22 @@ var Customer = sequelize.define('customer', {
 // });
 
 // API
-router.route("/customer")
+router.route(["/customer", '/customer/*'])
+    .post(function(req, res) {
+        (async () => {
+            try {
+                var params = req.body;
+                row = await Customer.create(params);
+                res.json({ status: -1, message: "create okay!", result: row.get({plain: true}) });   
+            } catch(err) {
+                console.log(err);
+            }
+        })();
+    })
     .get(function(req, res) {
         (async () => {
             try {
                 var params = req.query;
-                // { _dc: '1499604759397', page: '1', start: '0', limit: '25' },
                 var rows = await Customer.findAll({
                     order: [['uid', 'DESC']],
                     limit: params.limit,
@@ -34,29 +44,35 @@ router.route("/customer")
                 for (var i = 0; i < rows.length; i++) {
                     result.push(rows[i].get({plain: true}))
                 }            
-                res.json({ status: -1, message: 'Success', result: result });                       
+                res.json({ status: -1, message: 'read okay!', result: result });                       
             } catch(err) {
                 console.log(err);
             }
         })();
     })
-    .post(function(req, res) {
+    .put(function(req, res) {
         (async () => {
             try {
                 var params = req.body;
-                console.log(req);
-                /*
-                var json = JSON.parse(params.data);
-                console.log(params);
-                console.log(params.data);
-                console.log(json);
-                */
-                res.json({ status: -1, message: "i use post" });   
+                var row = await Customer.findOne({where: {uid: params.uid}});
+                row = await row.update(params);
+                res.json({ status: -1, message: "update okay!", result: row.get({plain: true}) });   
             } catch(err) {
                 console.log(err);
             }
         })();
-
+    })
+    .delete(function(req, res) {
+        (async () => {
+            try {
+                var params = req.body;
+                var row = await Customer.findOne({where: {uid: params.uid}});
+                row.destroy({ force: true })
+                res.json({ status: -1, message: "delete okay!" });   
+            } catch(err) {
+                console.log(err);
+            }
+        })();
     }); 
 
 
