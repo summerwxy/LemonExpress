@@ -16,11 +16,11 @@ var table = sequelize.define('customer', {
     remark: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
 });
 
-// table.sync({force: false}).then(function() {
-//     // if (isCreateTestData) {
-//     //     // nothing
-//     // }
-// });
+table.sync({force: true}).then(function() {
+    // if (isCreateTestData) {
+    //     // nothing
+    // }
+});
 
 // API
 router.route(["/customer", '/customer/*'])
