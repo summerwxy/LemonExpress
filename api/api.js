@@ -13,6 +13,7 @@ var sequelize = new Sequelize(DATABASE_URL, opts);
 
 
 
+
 // common functions ===============
 var POST_FUNC = function(REQ, RES, INSTANCE) {
     (async () => {
