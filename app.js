@@ -12,7 +12,6 @@ app.use(cors({
   credentials: true,
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }));
-// app.options('*', cors()); // include before other routes
 
 // session timeout
 app.use(cookieParser());
@@ -78,8 +77,8 @@ app.get("/api/isSignin", function(req, res) {
 });
 
 
-// TODO: catch erroe status code
-app.all('/*', function(req, res, next) {
+// if not login return error 401
+app.all('/api/*', function(req, res, next) {
   if (req.session.user === undefined) {
     res.status(401).send('{ message: "Unauthorized" }');
     return;
