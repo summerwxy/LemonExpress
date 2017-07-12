@@ -79,13 +79,13 @@ app.get("/api/isSignin", function(req, res) {
 
 
 // TODO: catch erroe status code
-app.all('/*', function(req, res, next) {
-  if (req.session.user === undefined) {
-    res.status(401).send('{ message: "Unauthorized" }');
-    return;
-  }
-  next();
-});
+// app.all('/*', function(req, res, next) {
+//   if (req.session.user === undefined) {
+//     res.status(401).send('{ message: "Unauthorized" }');
+//     return;
+//   }
+//   next();
+// });
 
 
 
@@ -108,7 +108,8 @@ app.use('/api', api.router);
 
 
 // 所有的訪問, 跑到 index.html 那邊去
-app.all("/*", function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
+// app.all("/*", function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
+app.all(["/*"], function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
 
 
 // dev mode port 5000
