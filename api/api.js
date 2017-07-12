@@ -19,8 +19,20 @@ var POST_FUNC = function(REQ, RES, INSTANCE) {
     (async () => {
         try {
             var params = REQ.body;
-            row = await INSTANCE.create(params);
-            RES.json({ status: -1, message: "create okay!", result: row.get({plain: true}) });   
+            if (params instanceof Array) {
+                var result = [];
+                for (var i in params) {
+                    var param = params[i];
+                    delete param['uid']
+                    row = await INSTANCE.create(param);
+                    result.push(row.get({plain: true}));
+                }
+                RES.json({ status: -1, message: "create okay!", result: result });   
+            } else {
+                delete params['uid']
+                row = await INSTANCE.create(params);
+                RES.json({ status: -1, message: "create okay!", result: row.get({plain: true}) });   
+            }
         } catch(err) {
             console.log(err);
             RES.status(500).send('Something Error: ' + err);

@@ -1,12 +1,8 @@
 var express = require('express')
-var cookieParser = require('cookie-parser')
-var session = require('express-session')
-var cors = require('cors')
-
-
 var app = express();
 
 // CORS settings
+var cors = require('cors')
 app.use(cors({
   origin: 'http://localhost:1841',
   credentials: true,
@@ -14,7 +10,9 @@ app.use(cors({
 }));
 
 // session timeout
+var cookieParser = require('cookie-parser')
 app.use(cookieParser());
+var session = require('express-session')
 app.use(session({
   secret: '02474394-78e2-493b-9861-491e178f2e32',
   resave: false,
@@ -40,17 +38,8 @@ app.get('/favicon.ico', function(req, res) { res.sendFile("favicon.ico", { root:
 
 
 
-// TODO: for test session...
-app.get('/test', function(req, res) {
-  if (req.session.cnt === undefined) {
-    req.session.cnt = 0;
-  }
-  req.session.cnt = req.session.cnt + 1;
-  res.json({ status: -1, message: req.session.cnt });   
-});
-
-
-// signin function
+// API endpoints =========================================
+// signin api
 app.post('/api/signin', function (req, res) { 
   (async () => {
     try {
@@ -67,7 +56,7 @@ app.post('/api/signin', function (req, res) {
   })();  
 });
 
-// isSignin Page
+// isSignin api
 app.get("/api/isSignin", function(req, res) { 
   if (req.session.user === undefined) {
     res.json({ status: 0, message: "i am not signined!", result: 'no' });   
@@ -78,7 +67,6 @@ app.get("/api/isSignin", function(req, res) {
 
 
 // if not login return error 401
-// TODO: '/*' ......test what is right code
 app.all('/api/*', function(req, res, next) {
   if (req.session.user === undefined) {
     res.status(401).send('{ message: "Unauthorized" }');
@@ -86,29 +74,23 @@ app.all('/api/*', function(req, res, next) {
   }
   next();
 });
+// ==============================================
 
-
-// API endpoints
-// app.all('/api/customer', function(req, res) {
-//   console.log('custom');
-//   res.send('Hello World!')
-// });
-
-
-// add by 0_o =======================================================================
+// body parser
 // 這個要寫在前面, 才能掛上 router, 加上這個才能取得, post 的參數
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '16mb'})); // for parsing application/json
 app.use(bodyParser.urlencoded({ limit: '16mb', extended: false })); // for parsing application/x-www-form-urlencoded
 
+// routers
 var api = require('./api/api');
 app.use('/api', api.router);
 // ===================================================================================
 
 
-// 所有的訪問, 跑到 index.html 那邊去
+// 其他的所有訪問, 跑到 index.html 那邊去
 // app.all("/*", function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
-app.all(["/*"], function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
+app.all(["/", '/index.html'], function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
 
 
 // dev mode port 5000
