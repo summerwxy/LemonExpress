@@ -78,6 +78,7 @@ app.get("/api/isSignin", function(req, res) {
 
 
 // if not login return error 401
+// TODO: '/*' ......test what is right code
 app.all('/api/*', function(req, res, next) {
   if (req.session.user === undefined) {
     res.status(401).send('{ message: "Unauthorized" }');
@@ -85,7 +86,6 @@ app.all('/api/*', function(req, res, next) {
   }
   next();
 });
-
 
 
 // API endpoints
@@ -107,7 +107,8 @@ app.use('/api', api.router);
 
 
 // 所有的訪問, 跑到 index.html 那邊去
-app.all("/*", function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
+// app.all("/*", function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
+app.all(["/*"], function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
 
 
 // dev mode port 5000
