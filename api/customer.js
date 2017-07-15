@@ -14,6 +14,8 @@ var table = sequelize.define('customer', {
     telephone: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
     location: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
     remark: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
+    createdBy: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
+    updatedBy: { type: Sequelize.STRING, allowNull: false, defaultValue: '' },
 });
 
 table.sync({force: true}).then(function() {

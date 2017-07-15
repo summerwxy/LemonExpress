@@ -19,20 +19,11 @@ var POST_FUNC = function(REQ, RES, INSTANCE) {
     (async () => {
         try {
             var params = REQ.body;
-            if (params instanceof Array) {
-                var result = [];
-                for (var i in params) {
-                    var param = params[i];
-                    delete param['uid']
-                    row = await INSTANCE.create(param);
-                    result.push(row.get({plain: true}));
-                }
-                RES.json({ status: -1, message: "create okay!", result: result });   
-            } else {
-                delete params['uid']
-                row = await INSTANCE.create(params);
-                RES.json({ status: -1, message: "create okay!", result: row.get({plain: true}) });   
-            }
+            delete params['uid']
+            params['createdBy'] = REQ.session.name
+            params['updatedBy'] = REQ.session.name
+            row = await INSTANCE.create(params);
+            RES.json({ status: -1, message: "create okay!", result: row.get({plain: true}) });   
         } catch(err) {
             console.log(err);
             RES.status(500).send('Something Error: ' + err);
@@ -66,6 +57,7 @@ var PUT_FUNC = function(REQ, RES, INSTANCE) {
         try {
             var params = REQ.body;
             var row = await INSTANCE.findOne({where: {uid: params.uid}});
+            param['updatedBy'] = req.session.name
             row = await row.update(params);
             RES.json({ status: -1, message: "update okay!", result: row.get({plain: true}) });   
         } catch(err) {

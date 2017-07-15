@@ -45,8 +45,9 @@ app.post('/api/signin', function (req, res) {
     try {
       var params = req.query;
       // TODO: finish it
-      if (params.user == 'wxy') {
-        req.session.user = 'wxy';
+      if (params.account == 'wxy') {
+        req.session.account = 'wxy';
+        req.session.name = 'LinYuWei';
       }
       res.json({ status: -1, message: "signin okay!" });   
     } catch(err) {
@@ -58,7 +59,7 @@ app.post('/api/signin', function (req, res) {
 
 // isSignin api
 app.get("/api/isSignin", function(req, res) { 
-  if (req.session.user === undefined) {
+  if (req.session.account === undefined) {
     res.json({ status: 0, message: "i am not signined!", result: 'no' });   
   } else {
     res.json({ status: 1, message: "i am signined!", result: 'yes' });   
@@ -68,7 +69,7 @@ app.get("/api/isSignin", function(req, res) {
 
 // if not login return error 401
 app.all('/api/*', function(req, res, next) {
-  if (req.session.user === undefined) {
+  if (req.session.account === undefined) {
     res.status(401).send('{ message: "Unauthorized" }');
     return;
   }
