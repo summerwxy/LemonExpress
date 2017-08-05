@@ -91,7 +91,9 @@ app.use('/api', api.router);
 
 // 其他的所有訪問, 跑到 index.html 那邊去
 // app.all("/*", function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
-app.all(["/", '/index.html'], function(req, res, next) { res.sendFile("index.html", { root: __dirname + "/Lemon" }); });
+app.all(["/", '/index.html'], function(req, res, next) { 
+  res.sendFile("index.html", { root: __dirname + "/index_v1" }); 
+});
 
 
 // dev mode port 5000
